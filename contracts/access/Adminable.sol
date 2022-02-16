@@ -5,19 +5,24 @@ import { AddressArray } from "../libraries/AddressArray.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 /**
  * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
+ * there is an accounts list that can be granted exclusive access to
  * specific functions.
  *
- * By default, the owner account will be the one that deploys the contract. This
- * can later be changed with {transferOwnership}.
+ * By default, admins list is empty, you can update it with given methods like
+ * setAdmins or removeAdmins
  *
- * This module is used through inheritance. It will make available the modifier
- * `onlyOwner`, which can be applied to your functions to restrict their use to
- * the owner.
  */
 abstract contract Adminable is Ownable {
+    /**
+    * Contains the array of addresses that can access to functions
+    * with modifier onlyAdmin
+    */
     address[] _admins;
 
+    /**
+     * Modifier that restricts functions to use for addresses that are 
+     * written to _address 
+     */
     modifier onlyAdmin() {
         require(msg.sender==owner() || AddressArray.indexOf(_admins, msg.sender) != -1, 
             "Compound: permitted to admins only");
